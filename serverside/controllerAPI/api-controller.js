@@ -693,8 +693,9 @@ router.post("/upload-image-2", async (req, res) => {
 /**
  * API for obtaining historical data
  *
- * @param {String} taskId
- * @return {Object}
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {Object} - JSON response
  */
 router.get("/history-data", async (req, res) => {
   try {
@@ -782,6 +783,13 @@ router.get("/history-data", async (req, res) => {
   }
 });
 
+/**
+ * API for obtaining historical data  (for socialworkerside)
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {Object} - JSON response
+ */
 router.get("/history-data-2", async (req, res) => {
   try {
     const connection = dbcon.getconnection(); // Get database connection
@@ -899,7 +907,6 @@ router.get("/history-data-2", async (req, res) => {
  * @param {Object} req
  * @param {Object} res
  * @return {Object}
- *
  */
 router.get("/health-knowledge", (req, res) => {
   const connection = dbcon.getconnection(); // Get database connection
@@ -919,11 +926,11 @@ router.get("/health-knowledge", (req, res) => {
 });
 
 /**
- * Retrieve the health knowledge API for the specified ID
+ * API for obtaining health knowledge by id
  *
  * @param {Object} req
  * @param {Object} res
- * @return {Object}
+ * @returns {Object} - JSON response
  */
 router.get("/health-knowledge/:health_knowledge_id", (req, res) => {
   const connection = dbcon.getconnection(); // Get database connection
