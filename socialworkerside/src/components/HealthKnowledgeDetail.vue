@@ -1,8 +1,8 @@
 <template>
   <div v-if="isLoggedIn" class="page">
-    <!-- 左侧导航栏 (老年用户端) -->
+    <!-- Left navigation bar (for elderly users) -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System name -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -32,16 +32,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User information (bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (老年用户端) -->
+    <!-- Main content area (for elderly users) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- Page title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Health Knowledge Details</h1>
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <!-- 健康知识详情 -->
+      <!-- Health knowledge details -->
       <el-card class="health-knowledge-card">
         <div v-if="loading">
           <el-skeleton :rows="10" animated />
@@ -75,7 +75,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -83,31 +82,30 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
   Setting,
-  Monitor, // 健康监测 Icon
-  // Add other necessary icons
+  Monitor,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
 const router = useRouter();
 const route = useRoute();
-const store = useStore(); // 使用 useStore
+const store = useStore(); // Use useStore
 
-// 获取 isLoggedIn 的值
+// Get the value of isLoggedIn
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
+// Get user information
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
   router.push("/");
 };
 
-// 替换为你的 API 地址
+// Replace with your API address
 const knowledgeApiUrl = ref(
   "http://localhost:3060/api/homecare/health-knowledge"
 );
@@ -115,7 +113,7 @@ const knowledgeApiUrl = ref(
 const knowledge = ref(null);
 const loading = ref(true);
 const error = ref(false);
-const formattedContent = ref(""); // 添加 formattedContent ref
+const formattedContent = ref("");
 
 const fetchKnowledgeDetail = async (health_knowledge_id) => {
   loading.value = true;
@@ -131,7 +129,6 @@ const fetchKnowledgeDetail = async (health_knowledge_id) => {
       }
     );
 
-    // 检查响应状态码
     if (!response.ok) {
       console.error(
         "API response error: ",
@@ -150,7 +147,7 @@ const fetchKnowledgeDetail = async (health_knowledge_id) => {
           " " +
           new Date(data.data.publish_time).toLocaleTimeString(),
       };
-      // 格式化文章内容
+      // Format article content
       formattedContent.value = knowledge.value.content.replace(/\n/g, "<br>");
     } else {
       console.error("API returned error: ", data.message);
@@ -181,7 +178,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header, .el-card, .card-header, .summary-kpi-card, .kpi-item, .kpi-icon, .kpi-text, .kpi-value, .kpi-label, .quick-access-card, .quick-access-buttons --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -189,19 +185,19 @@ onMounted(() => {
 }
 
 .side {
-  width: 220px; /* 确保设置了宽度 */
+  width: 220px;
   background-color: #001529;
   border-right: none;
   transition: width 0.28s;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed; /* 添加此属性 */
-  height: 100vh; /* 添加此属性 */
-  z-index: 10; /* 确保在其他内容之上 */
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
 }
 
-/* 系统名称样式 */
+/* System name style */
 .sTitle {
   color: #fff;
   padding: 20px;
@@ -210,41 +206,34 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 菜单容器，设置固定高度并隐藏溢出 */
 .menuWrap {
-  height: calc(100vh - 180px); /* 100vh 减去底部用户信息和系统名称的高度 */
-  overflow: auto; /* 修改为 auto，允许菜单内容滚动 */
+  height: calc(100vh - 180px);
+  overflow: auto;
 }
 
-/* Override ElMenu default styles for dark theme */
 .el-menu {
   border-right: none;
   background-color: #001529;
-  /* Match sidebar */
-  flex: 1; /* 占据剩余空间 */
+  flex: 1;
 }
 
 .el-menu-item,
 .el-sub-menu__title {
   color: rgba(255, 255, 255, 0.65);
-  /* Light text color */
 }
 
 .el-menu-item:hover,
 .el-sub-menu__title:hover {
   background-color: #000c17;
-  /* Darker hover */
   color: #fff;
 }
 
 .el-menu-item.is-active {
   background-color: #1890ff;
-  /* Active color */
   color: #fff;
 }
 
 .el-sub-menu.is-active .el-sub-menu__title {
-  /* Keep parent active color */
   color: #fff;
 }
 
@@ -260,7 +249,6 @@ onMounted(() => {
 
 .el-menu--inline .el-menu-item:hover {
   background-color: #001529 !important;
-  /* Slightly lighter hover */
   color: #fff;
 }
 
@@ -279,7 +267,6 @@ onMounted(() => {
 .el-sub-menu__title .el-icon {
   vertical-align: middle;
   margin-right: 10px;
-  /* Increased spacing */
   width: 24px;
   text-align: center;
   font-size: 18px;
@@ -287,16 +274,14 @@ onMounted(() => {
 
 .el-sub-menu .el-menu-item {
   min-width: 220px;
-  /* Ensure submenu items fill width */
   padding-left: 48px !important;
-  /* Indent submenu items */
 }
 
 .main {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  margin-left: 220px; /* 添加此属性，与侧边栏宽度相同 */
+  margin-left: 220px;
 }
 
 .pHeader {
@@ -306,7 +291,6 @@ onMounted(() => {
 .hTitle h1 {
   margin: 0;
   font-size: 22px;
-  /* Slightly smaller for admin */
   color: #303133;
   font-weight: 600;
 }
@@ -327,7 +311,6 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  /* Bold header */
   color: #303133;
   font-size: 16px;
 }
@@ -337,7 +320,6 @@ onMounted(() => {
   font-weight: normal;
 }
 
-/* User Info Bottom Styles */
 .uInfo {
   display: flex;
   align-items: center;
@@ -351,7 +333,7 @@ onMounted(() => {
   font-size: 16px;
 }
 
-/* 自定义样式 */
+/* Custom styles */
 .card-footer {
   font-size: 12px;
   color: #606266;
@@ -367,7 +349,6 @@ onMounted(() => {
   margin-bottom: 15px;
 }
 
-/* 新增样式 */
 .knowledge-info {
   display: flex;
   align-items: center;
@@ -390,11 +371,10 @@ onMounted(() => {
   font-size: 12px;
 }
 
-/* 灰色横线 */
 .gray-hr {
   border: 0;
   height: 1px;
-  background: #ccc; /* 设置为灰色 */
-  margin: 10px 0; /* 可选：调整上下边距 */
+  background: #ccc;
+  margin: 10px 0;
 }
 </style>

@@ -2,7 +2,7 @@
   <div v-if="isLoggedIn" class="page">
     <!-- Sidebar -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System name -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -45,9 +45,9 @@
       </div>
     </el-aside>
 
-    <!-- 主内容区 (用户管理页面) -->
+    <!-- Main Content Area (User Management Page) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>User Management</h1>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <!-- 用户列表 -->
+      <!-- User List -->
       <el-card class="umCard">
         <template #header>
           <div class="card-header">
@@ -124,7 +124,7 @@
         </div>
       </el-card>
 
-      <!-- 新增/编辑用户对话框 -->
+      <!-- Add/Edit User Dialogue Box -->
       <el-dialog v-model="dialogVisible" :title="dialogTitle" width="50%">
         <el-form :model="userForm" label-width="180px">
           <el-form-item label="Username">
@@ -198,7 +198,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -206,7 +205,7 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
@@ -216,27 +215,23 @@ import {
 import { ElMessage } from "element-plus";
 
 const router = useRouter();
-const store = useStore(); // 使用 useStore
+const store = useStore();
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
   router.push("/");
 };
 
-// 替换为你的 API 地址
-const userApiUrl = ref("http://localhost:3060/api/homecare/users"); // 替换为你的 API 地址
-const userApiDeleteUrl = ref("http://localhost:3060/api/homecare/users"); // 替换为你的 API 地址
+const userApiUrl = ref("http://localhost:3060/api/homecare/users");
+const userApiDeleteUrl = ref("http://localhost:3060/api/homecare/users");
 
 const users = ref([]);
 const loading = ref(true);
 const error = ref(false);
 
-// 对话框相关
 const dialogVisible = ref(false);
 const dialogTitle = ref("");
 const userForm = ref({
@@ -256,7 +251,7 @@ const userForm = ref({
   emergency_contact_phone: "",
   allergies: "",
 });
-const editingUserId = ref(null); // 用于存储正在编辑的用户ID
+const editingUserId = ref(null);
 
 const fetchUsers = async () => {
   loading.value = true;
@@ -269,7 +264,6 @@ const fetchUsers = async () => {
       },
     });
 
-    // 检查响应状态码
     if (!response.ok) {
       console.error(
         "API response error:",
@@ -281,7 +275,6 @@ const fetchUsers = async () => {
 
     const data = await response.json();
 
-    // 检查数据是否成功返回
     if (data.success) {
       users.value = data.data;
     } else {
@@ -298,24 +291,21 @@ const fetchUsers = async () => {
   }
 };
 
-// 打开编辑用户对话框
 const openEditUserDialog = (row) => {
   dialogTitle.value = "Edit user";
-  editingUserId.value = row.id; // 存储编辑用户ID
+  editingUserId.value = row.id;
   userForm.value = { ...row };
   dialogVisible.value = true;
 };
 
-// 保存用户
 const saveUser = async () => {
   try {
     const token = localStorage.getItem("token");
-    let url = userApiUrl.value; // 默认是新增用户的API
+    let url = userApiUrl.value;
     let method = "POST";
 
     if (editingUserId.value) {
-      // 如果有编辑用户ID，则是更新用户
-      url = `${userApiUrl.value}/${editingUserId.value}`; // 替换为你的更新用户 API 端点
+      url = `${userApiUrl.value}/${editingUserId.value}`;
       method = "PUT";
     }
 
@@ -323,7 +313,7 @@ const saveUser = async () => {
       method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // 添加 Token 到 Authorization 头部
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(userForm.value),
     });
@@ -337,7 +327,7 @@ const saveUser = async () => {
     if (data.success) {
       ElMessage.success({ message: "Save user successfully", duration: 3000 });
       dialogVisible.value = false;
-      fetchUsers(); // 刷新用户列表
+      fetchUsers();
     } else {
       ElMessage.error({
         message: `Failed to save user:${data.message}`,
@@ -353,7 +343,6 @@ const saveUser = async () => {
   }
 };
 
-// 删除用户
 const deleteUser = async (id) => {
   try {
     const token = localStorage.getItem("token");
@@ -366,7 +355,7 @@ const deleteUser = async (id) => {
 
     if (!response.ok) {
       console.error("Delete failed:", response.status, response.statusText);
-      // 尝试解析响应体以获取更详细的错误信息
+
       try {
         const errorData = await response.json();
         ElMessage.error(
@@ -375,17 +364,16 @@ const deleteUser = async (id) => {
           })`
         );
       } catch (jsonError) {
-        // 如果解析 JSON 失败，则显示通用错误消息
         ElMessage.error(`Delete failed (status:${response.status})`);
       }
-      return; // 提前返回，不执行后续操作
+      return;
     }
 
     const data = await response.json();
 
     if (data.success) {
       ElMessage.success("Delete successfully");
-      fetchUsers(); // 刷新列表
+      fetchUsers();
     } else {
       ElMessage.error(data.message || "Delete failed");
     }
@@ -403,7 +391,7 @@ onMounted(() => {
 
 const formatDate = (dateString) => {
   if (!dateString) return "";
-  return dateString.substring(0, 10); // 仅显示前 10 个字符 (YYYY-MM-DD)
+  return dateString.substring(0, 10);
 };
 </script>
 
@@ -560,7 +548,6 @@ const formatDate = (dateString) => {
   font-size: 16px;
 }
 
-/* Home 组件样式 */
 .homeWrap {
   padding: 20px;
 }

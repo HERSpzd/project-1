@@ -248,7 +248,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -400,7 +399,6 @@ onMounted(() => {
   font-size: 16px;
 }
 
-/* 健康数据卡片样式 */
 .health-data-card {
   margin-bottom: 20px;
 }

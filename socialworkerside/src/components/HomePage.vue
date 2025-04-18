@@ -1,8 +1,8 @@
 <template>
   <div v-if="isLoggedIn" class="page">
-    <!-- 左侧导航栏 (社工用户端) -->
+    <!-- Left navigation bar (social worker user side) -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System name -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -28,16 +28,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User Information (Bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (Home 页面) -->
+    <!-- Main Content Area (Home Page) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Welcome, social worker</h1>
@@ -47,7 +47,7 @@
         </div>
       </div>
 
-      <!-- Home 组件内容 -->
+      <!-- Home Component Content -->
       <div class="home-container">
         <div class="summary-cards">
           <el-card class="summary-card">
@@ -116,7 +116,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -124,22 +123,20 @@
 <script setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
   Setting,
   Monitor,
 } from "@element-plus/icons-vue";
-import { User, Bell, Document } from "@element-plus/icons-vue"; // 引入 Home 组件需要的图标
+import { User, Bell, Document } from "@element-plus/icons-vue";
 
 const router = useRouter();
-const store = useStore(); // 使用 useStore
+const store = useStore();
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
@@ -148,7 +145,6 @@ const goToLogin = () => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header, .el-card, .card-header, .summary-kpi-card, .kpi-item, .kpi-icon, .kpi-text, .kpi-value, .kpi-label, .quick-access-card, .quick-access-buttons --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -156,19 +152,18 @@ const goToLogin = () => {
 }
 
 .side {
-  width: 220px; /* 确保设置了宽度 */
+  width: 220px;
   background-color: #001529;
   border-right: none;
   transition: width 0.28s;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed; /* 添加此属性 */
-  height: 100vh; /* 添加此属性 */
-  z-index: 10; /* 确保在其他内容之上 */
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
 }
 
-/* 系统名称样式 */
 .sTitle {
   color: #fff;
   padding: 20px;
@@ -177,18 +172,16 @@ const goToLogin = () => {
   text-align: center;
 }
 
-/* 菜单容器，设置固定高度并隐藏溢出 */
 .menuWrap {
-  height: calc(100vh - 180px); /* 100vh 减去底部用户信息和系统名称的高度 */
-  overflow: auto; /* 修改为 auto，允许菜单内容滚动 */
+  height: calc(100vh - 180px);
+  overflow: auto;
 }
 
-/* Override ElMenu default styles for dark theme */
 .el-menu {
   border-right: none;
   background-color: #001529;
   /* Match sidebar */
-  flex: 1; /* 占据剩余空间 */
+  flex: 1;
 }
 
 .el-menu-item,
@@ -263,7 +256,7 @@ const goToLogin = () => {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  margin-left: 220px; /* 添加此属性，与侧边栏宽度相同 */
+  margin-left: 220px;
 }
 
 .pHeader {
@@ -318,7 +311,6 @@ const goToLogin = () => {
   font-size: 16px;
 }
 
-/* Home 组件样式 */
 .home-container {
   padding: 20px;
 }
@@ -342,7 +334,7 @@ const goToLogin = () => {
 .card-icon {
   font-size: 30px;
   margin-right: 15px;
-  color: #409eff; /* Element Plus 主题色 */
+  color: #409eff;
 }
 
 .card-text {

@@ -2,7 +2,7 @@
   <div v-if="isLoggedIn" class="page">
     <!-- Sidebar -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -38,16 +38,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User Information (Bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (老年用户端) -->
+    <!-- Main Content Area (Elderly User Terminal) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Publish health knowledge</h1>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <!-- 发布健康知识表单 -->
+      <!-- Publish Health Knowledge Form -->
       <el-card class="hkCard">
         <el-form
           ref="publishForm"
@@ -114,7 +114,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -185,7 +184,7 @@ const submitForm = async () => {
         if (response.ok) {
           ElMessage.success("Published successfully!");
           resetForm();
-          router.push("/health-knowledge/list"); // 发布成功后跳转到列表页
+          router.push("/health-knowledge/list");
         } else {
           const errorData = await response.json();
           ElMessage.error(

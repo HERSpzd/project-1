@@ -1,8 +1,8 @@
 <template>
   <div v-if="isLoggedIn" class="page">
-    <!-- 左侧导航栏 (老年用户端) -->
+    <!-- Left navigation bar (for elderly users) -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -81,7 +81,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -94,8 +93,7 @@ import {
   Platform,
   DocumentCopy,
   Setting,
-  Monitor, // 健康监测 Icon
-  // Add other necessary icons
+  Monitor,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
@@ -103,17 +101,14 @@ const router = useRouter();
 const route = useRoute();
 const store = useStore(); // 使用 useStore
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
   router.push("/");
 };
 
-// 替换为你的 API 地址
 const knowledgeApiUrl = ref(
   "http://localhost:3060/api/homecare/health-knowledge"
 );
@@ -137,7 +132,6 @@ const fetchKnowledgeDetail = async (health_knowledge_id) => {
       }
     );
 
-    // 检查响应状态码
     if (!response.ok) {
       console.error(
         "API response error: ",
@@ -156,7 +150,7 @@ const fetchKnowledgeDetail = async (health_knowledge_id) => {
           " " +
           new Date(data.data.publish_time).toLocaleTimeString(),
       };
-      // 格式化文章内容
+
       formattedContent.value = knowledge.value.content.replace(/\n/g, "<br>");
     } else {
       console.error("API returned error:", data.message);
@@ -195,19 +189,18 @@ onMounted(() => {
 }
 
 .side {
-  width: 220px; /* 确保设置了宽度 */
+  width: 220px;
   background-color: #001529;
   border-right: none;
   transition: width 0.28s;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed; /* 添加此属性 */
-  height: 100vh; /* 添加此属性，使其高度撑满整个视口 */
-  z-index: 10; /* 确保在其他内容之上 */
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
 }
 
-/* 系统名称样式 */
 .sTitle {
   color: #fff;
   padding: 20px;
@@ -216,10 +209,9 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 菜单容器，设置固定高度并隐藏溢出 */
 .menuWrap {
-  height: calc(100vh - 180px); /* 100vh 减去底部用户信息和系统名称的高度 */
-  overflow: auto; /* 修改为 auto，允许菜单内容滚动 */
+  height: calc(100vh - 180px);
+  overflow: auto;
 }
 
 /* Override ElMenu default styles for dark theme */
@@ -227,7 +219,7 @@ onMounted(() => {
   border-right: none;
   background-color: #001529;
   /* Match sidebar */
-  flex: 1; /* 占据剩余空间 */
+  flex: 1;
 }
 
 .el-menu-item,
@@ -302,7 +294,7 @@ onMounted(() => {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  margin-left: 220px; /* 添加此属性，与侧边栏宽度相同 */
+  margin-left: 220px;
 }
 
 .pHeader {
@@ -357,7 +349,6 @@ onMounted(() => {
   font-size: 16px;
 }
 
-/* 自定义样式 */
 .card-footer {
   font-size: 12px;
   color: #606266;
@@ -373,7 +364,6 @@ onMounted(() => {
   margin-bottom: 15px;
 }
 
-/* 新增样式 */
 .knowledge-info {
   display: flex;
   align-items: center;
@@ -396,11 +386,10 @@ onMounted(() => {
   font-size: 12px;
 }
 
-/* 灰色横线 */
 .gray-hr {
   border: 0;
   height: 1px;
-  background: #ccc; /* 设置为灰色 */
-  margin: 10px 0; /* 可选：调整上下边距 */
+  background: #ccc;
+  margin: 10px 0;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div v-if="isLoggedIn" class="page">
-    <!-- 左侧导航栏 (老年用户端) -->
+    <!-- Left navigation bar (for elderly users) -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System name -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -38,16 +38,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User Information (Bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (老年用户端) -->
+    <!-- Main Content Area (Elderly User Terminal) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Health knowledge</h1>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <!-- 健康知识列表 -->
+      <!-- Health Knowledge List -->
       <el-card class="health-knowledge-card">
         <div v-if="loading">
           <el-skeleton :rows="5" animated />
@@ -109,7 +109,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -117,30 +116,26 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
   Setting,
-  Monitor, // 健康监测 Icon
-  // Add other necessary icons
+  Monitor,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
 const router = useRouter();
-const store = useStore(); // 使用 useStore
+const store = useStore();
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
   router.push("/");
 };
 
-// 替换为你的 API 地址
 const knowledgeApiUrl = ref(
   "http://localhost:3060/api/homecare/health-knowledge"
 );
@@ -163,7 +158,6 @@ const fetchKnowledge = async () => {
       },
     });
 
-    // 检查响应状态码
     if (!response.ok) {
       console.error(
         "API response error:",
@@ -175,14 +169,12 @@ const fetchKnowledge = async () => {
 
     const data = await response.json();
 
-    // 检查数据是否成功返回
     if (data.success) {
-      // 对数据进行排序
       knowledgeList.value = data.data
-        .sort((a, b) => new Date(b.publish_time) - new Date(a.publish_time)) // 按照 publish_time 降序排列
+        .sort((a, b) => new Date(b.publish_time) - new Date(a.publish_time))
         .map((item) => ({
           ...item,
-          id: item.health_knowledge_id, // 将 health_knowledge_id 赋值给 id
+          id: item.health_knowledge_id,
           contentSnippet: item.content.substring(0, 50),
           formattedTime:
             new Date(item.publish_time).toLocaleDateString() +
@@ -216,14 +208,14 @@ const deleteKnowledge = async (id) => {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // 显式设置 Content-Type
+          "Content-Type": "application/json",
         },
       }
     );
 
     if (!response.ok) {
       console.error("Delete failed:", response.status, response.statusText);
-      // 尝试解析响应体以获取更详细的错误信息
+
       try {
         const errorData = await response.json();
         ElMessage.error(
@@ -232,17 +224,16 @@ const deleteKnowledge = async (id) => {
           })`
         );
       } catch (jsonError) {
-        // 如果解析 JSON 失败，则显示通用错误消息
         ElMessage.error(`Delete failed (Status:${response.status})`);
       }
-      return; // 提前返回，不执行后续操作
+      return;
     }
 
     const data = await response.json();
 
     if (data.success) {
       ElMessage.success("Delete successfully");
-      fetchKnowledge(); // 刷新列表
+      fetchKnowledge();
     } else {
       ElMessage.error(data.message || "Delete failed");
     }
@@ -255,7 +246,7 @@ const deleteKnowledge = async (id) => {
 };
 
 const editKnowledge = (id) => {
-  router.push({ path: `/health-knowledge-edit/${id}` }); // 跳转到编辑页面
+  router.push({ path: `/health-knowledge-edit/${id}` });
 };
 
 onMounted(() => {
@@ -264,7 +255,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header, .el-card, .card-header, .summary-kpi-card, .kpi-item, .kpi-icon, .kpi-text, .kpi-value, .kpi-label, .quick-access-card, .quick-access-buttons --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -272,16 +262,16 @@ onMounted(() => {
 }
 
 .side {
-  width: 220px; /* 确保设置了宽度 */
+  width: 220px;
   background-color: #001529;
   border-right: none;
   transition: width 0.28s;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed; /* 添加此属性 */
-  height: 100vh; /* 添加此属性，使其高度撑满整个视口 */
-  z-index: 10; /* 确保在其他内容之上 */
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
 }
 
 /* 系统名称样式 */
@@ -293,10 +283,9 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 菜单容器，设置固定高度并隐藏溢出 */
 .menuWrap {
-  height: calc(100vh - 180px); /* 100vh 减去底部用户信息和系统名称的高度 */
-  overflow: auto; /* 修改为 auto，允许菜单内容滚动 */
+  height: calc(100vh - 180px);
+  overflow: auto;
 }
 
 /* Override ElMenu default styles for dark theme */
@@ -304,7 +293,7 @@ onMounted(() => {
   border-right: none;
   background-color: #001529;
   /* Match sidebar */
-  flex: 1; /* 占据剩余空间 */
+  flex: 1;
 }
 
 .el-menu-item,
@@ -379,7 +368,7 @@ onMounted(() => {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  margin-left: 220px; /* 添加此属性，与侧边栏宽度相同 */
+  margin-left: 220px;
 }
 
 .pHeader {
@@ -420,7 +409,6 @@ onMounted(() => {
   font-weight: normal;
 }
 
-/* 自定义样式 */
 .health-knowledge-card {
   margin-bottom: 0;
 }
@@ -490,14 +478,12 @@ onMounted(() => {
   margin-bottom: 15px;
 }
 
-/* 修改主内容区域的样式 */
 .main {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
 }
 
-/* 修改页面标题的样式 */
 .pHeader {
   margin-bottom: 24px;
 }

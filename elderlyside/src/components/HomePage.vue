@@ -2,7 +2,7 @@
   <div v-if="isLoggedIn" class="page">
     <!-- Sidebar -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -26,16 +26,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User Information (Bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (Home 页面) -->
+    <!-- Main Content Area (Home Page) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Welcome, elderly user!</h1>
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <!-- Home 组件内容 -->
+      <!-- Home Component Content -->
       <div class="homeWrap">
         <div class="sumCards">
           <el-card class="sumCard">
@@ -113,31 +113,28 @@
     </div>
   </div>
   <div v-else>
-    <h1>请先登录</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
-    <el-button type="primary" @click="goToLogin">去登录</el-button>
+    <h1>Please log in first</h1>
+    <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
   Setting,
-  Monitor, // 健康监测 Icon
+  Monitor,
 } from "@element-plus/icons-vue";
-import { User, Bell, Document } from "@element-plus/icons-vue"; // 引入 Home 组件需要的图标
+import { User, Bell, Document } from "@element-plus/icons-vue";
 
 const router = useRouter();
-const store = useStore(); // 使用 useStore
+const store = useStore();
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
@@ -298,7 +295,6 @@ const goToLogin = () => {
   font-size: 16px;
 }
 
-/* Home 组件样式 */
 .homeWrap {
   padding: 20px;
 }

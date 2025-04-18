@@ -128,7 +128,6 @@
   </div>
   <div v-else>
     <h1>Please log in</h1>
-    <!-- You can add a link to jump to the login page -->
     <el-button type="primary" @click="goToLogin">Go to Login</el-button>
   </div>
 </template>
@@ -242,7 +241,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -394,7 +392,6 @@ onMounted(() => {
   font-size: 16px;
 }
 
-/* 健康数据卡片样式 */
 .health-data-card {
   margin-bottom: 20px;
 }

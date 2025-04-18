@@ -141,7 +141,6 @@
   </div>
   <div v-else>
     <h1>Please Login</h1>
-    <!-- You can add a link to the login page -->
     <el-button type="primary" @click="goToLogin">Go to Login</el-button>
   </div>
 </template>
@@ -330,7 +329,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header, .el-card, .card-header, .summary-row, .summary-kpi-card, .kpi-item, .kpi-icon, .kpi-text, .kpi-value, .kpi-label, .quick-access-card, .quick-access-buttons --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -568,7 +566,6 @@ onMounted(async () => {
   overflow-y: auto;
 }
 
-/* Renamed class */
 .notification-timeline {
   padding-left: 5px;
   /* Adjust timeline padding */

@@ -2,7 +2,7 @@
   <div v-if="isLoggedIn" class="page">
     <!-- Sidebar -->
     <el-aside width="220px" class="side">
-      <!-- 系统名称 -->
+      <!-- System -->
       <div class="sTitle">Smart Home Elderly Care System</div>
 
       <div class="menuWrap">
@@ -30,16 +30,16 @@
         </el-menu>
       </div>
 
-      <!-- 用户信息 (底部) -->
+      <!-- User Information (Bottom) -->
       <div class="uInfo">
         <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
         <span>{{ userInfo.username }}</span>
       </div>
     </el-aside>
 
-    <!-- 主内容区 (老年用户端) -->
+    <!-- Main Content Area (Elderly User Terminal) -->
     <div class="main">
-      <!-- 页面标题 -->
+      <!-- title -->
       <div class="pHeader">
         <div class="hTitle">
           <h1>Health monitoring</h1>
@@ -70,7 +70,6 @@
         </div>
 
         <div v-if="uploading" class="uping">
-          <el-progress :percentage="uploadProgress"></el-progress>
           <p>Uploading and identifying data, please wait</p>
         </div>
 
@@ -93,9 +92,6 @@
             <el-descriptions-item label="Blood sugar"
               >{{ bloodSugarData.bloodSugar }} mg/dL</el-descriptions-item
             >
-            <el-descriptions-item label="Time">{{
-              bloodSugarData.time
-            }}</el-descriptions-item>
           </el-descriptions>
         </div>
 
@@ -130,7 +126,6 @@
   </div>
   <div v-else>
     <h1>Please log in first</h1>
-    <!-- 可以添加一个跳转到登录页面的链接 -->
     <el-button type="primary" @click="goToLogin">Go login</el-button>
   </div>
 </template>
@@ -138,37 +133,33 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex"; // 引入 useStore
+import { useStore } from "vuex";
 import {
   Platform,
   DocumentCopy,
   Setting,
-  Monitor, // 健康监测 Icon
-  // Add other necessary icons
+  Monitor,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
 const router = useRouter();
 const store = useStore(); // 使用 useStore
 
-// 获取 isLoggedIn 的值
 const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-// 获取用户信息
 const userInfo = computed(() => store.getters.userInfo);
 
 const goToLogin = () => {
   router.push("/");
 };
 
-// 替换为你的 API 地址
 const uploadBloodPressureUrl = ref(
   "http://localhost:3060/api/homecare/upload-image"
-); // 上传血压仪
+);
 const uploadBloodSugarUrl = ref(
   "http://localhost:3060/api/homecare/upload-image-2"
-); // 上传血糖仪
-const historyDataUrl = ref("http://localhost:3060/api/homecare/history-data"); // 获取历史数据
+);
+const historyDataUrl = ref("http://localhost:3060/api/homecare/history-data");
 
 const bloodPressureData = ref(null);
 const bloodSugarData = ref(null);
@@ -189,10 +180,10 @@ const handleUploadSuccess = (response, type) => {
     uploadSuccess.value = true;
     if (type === "blood_pressure") {
       bloodPressureData.value = response.data.value;
-      bloodSugarData.value = null; // 清空血糖数据
+      bloodSugarData.value = null;
     } else if (type === "blood_sugar") {
       bloodSugarData.value = response.data.value;
-      bloodPressureData.value = null; // 清空血压数据
+      bloodPressureData.value = null;
     } else {
       ElMessage.error("Unable to recognize data type");
       bloodPressureData.value = null;
@@ -210,7 +201,7 @@ const handleUploadSuccess = (response, type) => {
 const takePicture = (type) => {
   const context = canvas.value.getContext("2d");
   context.drawImage(video.value, 0, 0, 320, 240);
-  const imageDataURL = canvas.value.toDataURL("image/png"); // 获取 base64 编码的图像数据
+  const imageDataURL = canvas.value.toDataURL("image/png");
 
   uploadImage(imageDataURL, type);
 };
@@ -234,19 +225,19 @@ const uploadImage = async (imageDataURL, type) => {
   }
 
   try {
-    const token = localStorage.getItem("token") || store.getters.token; // 从 localStorage 或 vuex 获取 token
+    const token = localStorage.getItem("token") || store.getters.token;
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // 添加 JWT 令牌
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ image: imageDataURL }),
     });
 
     const data = await response.json();
     handleUploadSuccess(data, type);
-    await fetchHistoryData(); // 上传成功后刷新数据
+    await fetchHistoryData();
   } catch (error) {
     uploading.value = false;
     ElMessage.error("Upload failed, please check the network");
@@ -258,12 +249,11 @@ const fetchHistoryData = async () => {
     const token = localStorage.getItem("token") || store.getters.token; // 从 localStorage 或 vuex 获取 token
     const response = await fetch(historyDataUrl.value, {
       headers: {
-        Authorization: `Bearer ${token}`, // 添加 JWT 令牌
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = await response.json();
     if (data.success) {
-      // 分离血压数据和血糖数据
       bloodPressureHistoryData.value = data.data
         .filter((item) => item.type === "blood_pressure")
         .map((item) => ({
@@ -307,12 +297,11 @@ onMounted(() => {
       ElMessage.error("Unable to access camera, please check permissions");
     });
 
-  fetchHistoryData(); // 仅在页面加载时获取一次
+  fetchHistoryData();
 });
 </script>
 
 <style scoped>
-/* --- Keep previous styles for .app-container, .sidebar, .el-menu, .main-content, .page-header, .el-card, .card-header, .summary-row, .summary-kpi-card, .kpi-item, .kpi-icon, .kpi-text, .kpi-value, .kpi-label, .quick-access-card, .quick-access-buttons --- */
 .page {
   display: flex;
   min-height: 100vh;
@@ -323,14 +312,13 @@ onMounted(() => {
   background-color: #001529;
   border-right: none;
   transition: width 0.28s;
-  overflow: hidden; /* 隐藏水平滚动条 */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100vh; /* 占据整个视口高度 */
-  position: relative; /* 确保 user-info-bottom 可以相对于它定位 */
+  height: 100vh;
+  position: relative;
 }
 
-/* 系统名称样式 */
 .sTitle {
   color: #fff;
   padding: 20px;
@@ -339,9 +327,8 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 菜单容器，设置固定高度并隐藏溢出 */
 .menuWrap {
-  height: calc(100vh - 180px); /* 100vh 减去底部用户信息和系统名称的高度 */
+  height: calc(100vh - 180px);
   overflow-y: auto;
 }
 
@@ -350,7 +337,7 @@ onMounted(() => {
   border-right: none;
   background-color: #001529;
   /* Match sidebar */
-  flex: 1; /* 占据剩余空间 */
+  flex: 1;
 }
 
 .el-menu-item,
@@ -425,7 +412,7 @@ onMounted(() => {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  height: calc(100vh - 48px); /* 减去 padding 的高度 */
+  height: calc(100vh - 48px);
 }
 
 .pHeader {
@@ -572,10 +559,10 @@ onMounted(() => {
   padding: 20px;
   color: #fff;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  position: absolute; /* 绝对定位 */
-  bottom: 0; /* 位于底部 */
-  left: 0; /* 靠左 */
-  width: 100%; /* 占据全部宽度 */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 .uInfo span {
@@ -603,8 +590,8 @@ onMounted(() => {
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 10px; /* 添加按钮之间的间距 */
-  margin-top: 10px; /* 增加与视频的间距 */
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .uping {

@@ -265,7 +265,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Styles */
 .page {
   display: flex;
   min-height: 100vh;

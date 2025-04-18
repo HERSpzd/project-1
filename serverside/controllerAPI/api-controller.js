@@ -477,9 +477,12 @@ router.post("/upload-image", async (req, res) => {
     const description = baiduResponse.result.description;
 
     // Use regular expressions to extract blood pressure and pulse values
-    const systolicRegex = /- High blood pressure:\s*(\d+)\s*mmHg/;
-    const diastolicRegex = /- Low blood pressure:\s*(\d+)\s*mmHg/;
-    const pulseRegex = /- Pulse:\s*(\d+)\s*bpm/;
+    const systolicRegex =
+      /high blood pressure value(?: in the picture)? is\s*(\d+)\s*mmHg/;
+    const diastolicRegex =
+      /low blood pressure value(?: in the picture)? is\s*(\d+)\s*mmHg/;
+    const pulseRegex =
+      /pulse value(?: in the picture)? is\s*(\d+)\s*beats per minute/;
 
     const systolicMatch = description.match(systolicRegex);
     const diastolicMatch = description.match(diastolicRegex);
